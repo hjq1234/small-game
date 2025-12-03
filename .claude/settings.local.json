@@ -20,7 +20,10 @@
       "Bash(cat:*)",
       "Bash(git checkout:*)",
       "Bash(iconv:*)",
-      "Bash(git pull)"
+      "Bash(git pull)",
+      "Bash(ruff:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
