@@ -1,0 +1,240 @@
+# Quickstart Guide: Minesweeper Game
+
+## Overview
+
+A classic minesweeper game implementation using Python 3.13 and Pygame, featuring standard gameplay mechanics, multiple difficulty levels, and customizable board configurations.
+
+## Prerequisites
+
+- Python 3.13 or higher
+- Pygame 2.x
+- pytest (for running tests)
+
+## Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd minesweeper-game
+
+# Install dependencies
+pip install pygame pytest
+
+# Run the game
+python src/main.py
+```
+
+## Basic Usage
+
+### Starting the Game
+
+```bash
+# Run with default settings (Beginner difficulty)
+python src/main.py
+
+# Run with specific difficulty
+python src/main.py --difficulty intermediate
+
+# Run with custom settings
+python src/main.py --width 20 --height 20 --mines 50
+```
+
+### Game Controls
+
+- **Left Click**: Reveal cell
+- **Right Click**: Toggle flag on cell
+- **Double Left Click**: Auto-expand adjacent cells (when correct flags placed)
+- **Space**: Pause/Resume game
+- **R**: Restart current game
+- **N**: Start new game with current settings
+- **ESC**: Exit game
+
+### Difficulty Levels
+
+| Level | Board Size | Mines | Target Time |
+|-------|------------|-------|-------------|
+| Beginner | 9×9 | 10 | < 5 minutes |
+| Intermediate | 16×16 | 40 | < 15 minutes |
+| Advanced | 30×16 | 99 | < 30 minutes |
+
+## Development Setup
+
+### Project Structure
+
+```
+src/
+├── game/           # Game logic and models
+├── ui/             # User interface components
+├── main.py         # Application entry point
+└── config.py       # Configuration constants
+
+tests/
+├── unit/           # Unit tests
+├── integration/    # Integration tests
+└── contract/       # API contract tests
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src --cov-report=html
+
+# Run specific test categories
+pytest tests/unit/          # Unit tests only
+pytest tests/integration/   # Integration tests only
+```
+
+### Code Quality
+
+```bash
+# Format code (if black is installed)
+black src/ tests/
+
+# Type checking (if mypy is installed)
+mypy src/
+
+# Linting (if flake8 is installed)
+flake8 src/ tests/
+```
+
+## Architecture Overview
+
+### Core Components
+
+1. **Game Models** (`src/game/`)
+   - `board.py`: Board state management and mine generation
+   - `cell.py`: Individual cell behavior and state transitions
+   - `game_state.py`: Game session and state management
+   - `difficulty.py`: Difficulty level configurations
+   - `validator.py`: Board validation logic
+
+2. **UI Components** (`src/ui/`)
+   - `game_window.py`: Main game window and rendering loop
+   - `cell_renderer.py`: Cell visual representation and animations
+   - `input_handler.py`: Mouse and keyboard input processing
+   - `assets/`: Game sprites, fonts, and resources
+
+3. **Main Application** (`src/main.py`)
+   - Game initialization and configuration
+   - Main game loop with event handling
+   - Resource management and cleanup
+
+### Design Patterns
+
+- **Model-View-Controller**: Separation of game logic, UI, and input handling
+- **State Pattern**: Cell states (hidden, revealed, flagged) with transitions
+- **Observer Pattern**: Game state changes notify UI components
+- **Command Pattern**: Input actions as commands for extensibility
+
+## Performance Characteristics
+
+- **Target FPS**: 60 frames per second
+- **Memory Usage**: < 50MB for maximum board size (30×30)
+- **Response Time**: < 100ms for user interactions
+- **Board Size Range**: 9×9 to 30×30 cells
+- **Mine Density**: 10-25% of total cells
+
+## Testing Strategy
+
+### Unit Tests
+- Cell state transitions and validation
+- Board generation and mine placement
+- Game state management and win/loss detection
+- Input validation and error handling
+
+### Integration Tests
+- End-to-end game flow scenarios
+- UI component interaction testing
+- Performance benchmarking for large boards
+- Memory leak detection
+
+### Test Coverage Requirements
+- Minimum 80% code coverage (per constitution)
+- All game logic paths tested
+- UI responsiveness validated
+- Error conditions covered
+
+## Configuration
+
+### Game Constants (`src/config.py`)
+
+```python
+# Window settings
+WINDOW_TITLE = "Minesweeper"
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+MIN_WINDOW_SIZE = (400, 300)
+
+# Cell settings
+CELL_SIZE = 20  # pixels
+CELL_PADDING = 1
+MIN_CELL_SIZE = 15
+MAX_CELL_SIZE = 30
+
+# Colors (RGB)
+COLOR_HIDDEN = (192, 192, 192)
+COLOR_REVEALED = (255, 255, 255)
+COLOR_MINE = (255, 0, 0)
+COLOR_FLAG = (255, 255, 0)
+
+# Timing
+DOUBLE_CLICK_TIME = 300  # milliseconds
+FPS_TARGET = 60
+FPS_MIN = 30
+```
+
+### Custom Settings Validation
+
+- Minimum board size: 9×9 cells
+- Maximum board size: 30×30 cells
+- Mine count: 1 to (total_cells - 1)
+- Maximum mine density: 25%
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Game won't start**
+   - Check Python version: `python --version`
+   - Verify Pygame installation: `python -c "import pygame; print(pygame.version.ver)"`
+
+2. **Performance issues**
+   - Reduce board size or mine count
+   - Check system resources (CPU/memory usage)
+   - Disable unnecessary background applications
+
+3. **Display problems**
+   - Update graphics drivers
+   - Try windowed mode vs fullscreen
+   - Check display resolution compatibility
+
+### Debug Mode
+
+```bash
+# Run with debug logging
+python src/main.py --debug
+
+# Run with performance profiling
+python src/main.py --profile
+
+# Run with verbose output
+python src/main.py --verbose
+```
+
+## Extension Points
+
+The architecture supports easy extension for:
+- Additional difficulty levels
+- Custom themes and skins
+- Sound effects and music
+- High score tracking
+- Multiplayer functionality
+- Mobile platform support
+
+## Contributing
+
+See project documentation for contribution guidelines, coding standards, and development workflow.

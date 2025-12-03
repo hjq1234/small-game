@@ -19,7 +19,8 @@
       "Bash(/c/Windows/System32/WindowsPowerShell/v1.0/powershell:*)",
       "Bash(cat:*)",
       "Bash(git checkout:*)",
-      "Bash(iconv:*)"
+      "Bash(iconv:*)",
+      "Bash(git pull)"
     ],
     "deny": [],
     "ask": []

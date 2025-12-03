@@ -4,9 +4,9 @@ import pygame
 import sys
 from typing import Optional, Tuple, Dict, Any
 from game.game_state import GameSession, GameState, create_game_session
-from game.difficulty import DifficultyPreset
 from ui.cell_renderer import CellRendererFactory
 from ui.input_handler import InputHandler
+from ui.dropdown import DifficultyDropdown
 from config import (
     WINDOW_TITLE, WINDOW_WIDTH, WINDOW_HEIGHT, FPS_TARGET,
     COLOR_TEXT, COLOR_HIDDEN, FONT_SIZE_MEDIUM, FONT_SIZE_LARGE
@@ -27,13 +27,24 @@ class GameWindow:
 
         # Game state
         self.game_session: Optional[GameSession] = None
-        self.cell_renderers: Dict[Tuple[int, int], 'CellRenderer'] = {}
+        from ui.cell_renderer import CellRenderer
+        self.cell_renderers: Dict[Tuple[int, int], CellRenderer] = {}
         self.cell_renderer_factory = CellRendererFactory()
 
         # UI components
         self.font_medium = pygame.font.Font(None, FONT_SIZE_MEDIUM)
         self.font_large = pygame.font.Font(None, FONT_SIZE_LARGE)
         self.input_handler = InputHandler()
+
+        # Dropdown
+        self.difficulty_dropdown = DifficultyDropdown(
+            x=600,
+            y=10,
+            width=180,
+            height=30,
+            font=self.font_medium,
+            on_difficulty_select=self._on_difficulty_selected
+        )
 
         # Game settings
         self.board_offset_x = 50
@@ -100,6 +111,8 @@ class GameWindow:
         Args:
             event: Pygame event
         """
+        self.difficulty_dropdown.handle_event(event)
+
         action = self.input_handler.handle_events(event)
         if not action or not self.game_session:
             return
@@ -203,23 +216,21 @@ class GameWindow:
             self.game_session.reset_game()
             self._create_cell_renderers()
 
-    def _show_difficulty_menu(self) -> None:
-        """Show difficulty selection menu."""
-        # For now, just cycle through difficulties
-        # In a full implementation, this would show a proper menu
-        if not self.game_session:
+    def _on_difficulty_selected(self, difficulty_key: str, config: dict) -> None:
+        """Handle difficulty selection from dropdown.
+
+        Args:
+            difficulty_key: Selected difficulty key
+            config: Difficulty configuration
+        """
+        if difficulty_key == 'custom':
             return
 
-        current_difficulty = self.game_session.difficulty.name.lower()
-        difficulties = ['beginner', 'intermediate', 'advanced']
+        self.start_new_game(difficulty_key)
 
-        try:
-            current_index = difficulties.index(current_difficulty)
-            next_index = (current_index + 1) % len(difficulties)
-            self.start_new_game(difficulties[next_index])
-        except ValueError:
-            # Current difficulty not in list (custom), start with beginner
-            self.start_new_game('beginner')
+    def _show_difficulty_menu(self) -> None:
+        """Show difficulty selection dropdown."""
+        self.difficulty_dropdown.open()
 
     def _update_game(self) -> None:
         """Update game state."""
@@ -237,6 +248,9 @@ class GameWindow:
         # Render game board
         if self.game_session:
             self._render_board()
+
+        # Render dropdown
+        self.difficulty_dropdown.render(self.screen)
 
         # Update display
         pygame.display.flip()

@@ -19,6 +19,8 @@ COLOR_MINE = (255, 0, 0)            # Red
 COLOR_FLAG = (255, 255, 0)          # Yellow
 COLOR_TEXT = (0, 0, 0)              # Black
 COLOR_BORDER = (128, 128, 128)      # Dark gray
+COLOR_BG_HOVER = (220, 220, 220)    # Light blue-gray for hover
+COLOR_DROPDOWN_BG = (240, 240, 240) # Dropdown background
 
 # Game colors for numbers
 COLOR_NUMBER_1 = (0, 0, 255)          # Blue
