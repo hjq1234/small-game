@@ -1,50 +1,45 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+SYNC IMPACT REPORT
+Version change: N/A → 1.0.0 (Initial constitution)
+Modified principles: All new principles added
+Added sections: Core Principles, Security and Reliability, Development Workflow, Governance
+Removed sections: None
+Templates requiring updates:
+- plan-template.md: Constitution Check section needs alignment with new principles ✅
+- spec-template.md: Requirements section aligns with quality standards ✅
+- tasks-template.md: Task categorization supports testing/quality principles ✅
+Follow-up TODOs: None
+-->
+
+# Small Game Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Code Quality Standards
+All code must maintain consistent formatting, clear naming conventions, and comprehensive documentation. Functions should be single-purpose and testable. Code reviews are mandatory for all changes, focusing on readability, maintainability, and adherence to established patterns. Technical debt must be documented and addressed systematically.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Testing Standards (NON-NEGOTIABLE)
+Test-Driven Development is mandatory: write tests first, implement second. All new features require unit tests with >80% coverage. Integration tests required for user-facing features and API endpoints. Tests must be fast, isolated, and deterministic. Failed tests block deployment regardless of urgency.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. User Experience Consistency
+Maintain consistent UI patterns, navigation flows, and interaction behaviors across all game components. User actions must provide immediate visual feedback. Error messages must be clear, actionable, and user-friendly. Accessibility standards (WCAG 2.1) must be met for all user interfaces. Performance optimizations must not compromise user experience.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Performance Requirements
+Game must maintain 60 FPS on target hardware. Load times must not exceed 3 seconds for any screen. Memory usage must stay within allocated budgets. Network requests must be optimized and cached appropriately. Performance regressions require immediate remediation before release.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Code Review and Quality Gates
+All code changes require peer review before merge. Automated quality checks must pass: linting, type checking, security scanning, and test coverage. Breaking changes require architectural review and migration documentation. Release candidates must pass full regression testing suite.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Security and Reliability
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+Security vulnerabilities must be addressed immediately upon discovery. Input validation and sanitization required for all user inputs. Error handling must prevent information leakage. Dependencies must be regularly audited and updated. Backup and recovery procedures must be tested monthly.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+Feature development follows: specification → implementation → testing → review → deployment cycle. Continuous integration must pass all quality gates before merge. Deployment requires approval from technical lead and product owner. Hotfixes require post-deployment review and documentation. Performance monitoring and alerting required in production.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other development practices. Amendments require documentation update, team approval, and migration plan for existing code. All team members must verify compliance during code reviews. Technical decisions must reference relevant principles. Use project documentation for detailed implementation guidance.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-12-02 | **Last Amended**: 2025-12-02

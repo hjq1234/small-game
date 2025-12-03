@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git fetch:*)",
+      "Bash(.specify/scripts/powershell/create-new-feature.ps1:*)",
+      "Bash(pwsh:*)",
+      "Bash(powershell:*)",
+      "WebSearch",
+      "Bash(git rev-parse:*)",
+      "Bash(python -m pytest tests/unit/test_cell.py -v)",
+      "Bash(pip install:*)",
+      "Bash(python -m pytest tests/unit/ -v)",
+      "Bash(python -m pytest:*)",
+      "Bash(python:*)",
+      "Bash(timeout 5 python:*)",
+      "Bash(.specify/scripts/powershell/check-prerequisites.ps1:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(/c/Windows/System32/WindowsPowerShell/v1.0/powershell:*)",
+      "Bash(cat:*)",
+      "Bash(git checkout:*)",
+      "Bash(iconv:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

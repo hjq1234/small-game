@@ -1,0 +1,357 @@
+openapi: 3.0.0
+info:
+  title: Minesweeper Game API
+  version: 1.0.0
+  description: API contracts for minesweeper game actions and state management
+
+paths:
+  /game/new:
+    post:
+      summary: Start a new game
+      description: Initialize a new minesweeper game with specified difficulty or custom settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/DifficultyGameRequest'
+                - $ref: '#/components/schemas/CustomGameRequest'
+      responses:
+        '200':
+          description: Game created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameResponse'
+        '400':
+          description: Invalid game parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /game/{gameId}/reveal:
+    post:
+      summary: Reveal a cell
+      description: Reveal the cell at the specified position
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique game identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CellPositionRequest'
+      responses:
+        '200':
+          description: Cell revealed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevealResponse'
+        '400':
+          description: Invalid move or position
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Game not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /game/{gameId}/flag:
+    post:
+      summary: Toggle flag on a cell
+      description: Add or remove a flag marker on the specified cell
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique game identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CellPositionRequest'
+      responses:
+        '200':
+          description: Flag toggled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlagResponse'
+        '400':
+          description: Invalid position or cell state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /game/{gameId}/expand:
+    post:
+      summary: Auto-expand adjacent cells
+      description: Double-click action to reveal adjacent safe cells when correct number of flags are placed
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique game identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CellPositionRequest'
+      responses:
+        '200':
+          description: Adjacent cells expanded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpandResponse'
+        '400':
+          description: Not enough flags or invalid position
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /game/{gameId}:
+    get:
+      summary: Get game state
+      description: Retrieve current game state and board information
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique game identifier
+      responses:
+        '200':
+          description: Game state retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameStateResponse'
+        '404':
+          description: Game not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    DifficultyGameRequest:
+      type: object
+      required:
+        - difficulty
+      properties:
+        difficulty:
+          type: string
+          enum: [beginner, intermediate, advanced]
+          description: Predefined difficulty level
+
+    CustomGameRequest:
+      type: object
+      required:
+        - width
+        - height
+        - mineCount
+      properties:
+        width:
+          type: integer
+          minimum: 9
+          maximum: 30
+          description: Board width in cells
+        height:
+          type: integer
+          minimum: 9
+          maximum: 30
+          description: Board height in cells
+        mineCount:
+          type: integer
+          minimum: 1
+          description: Number of mines on the board
+
+    CellPositionRequest:
+      type: object
+      required:
+        - row
+        - col
+      properties:
+        row:
+          type: integer
+          minimum: 0
+          description: Row position (0-indexed)
+        col:
+          type: integer
+          minimum: 0
+          description: Column position (0-indexed)
+
+    GameResponse:
+      type: object
+      properties:
+        gameId:
+          type: string
+          description: Unique game identifier
+        boardWidth:
+          type: integer
+          description: Board width
+        boardHeight:
+          type: integer
+          description: Board height
+        mineCount:
+          type: integer
+          description: Total number of mines
+        state:
+          type: string
+          enum: [new, playing, paused, won, lost]
+          description: Current game state
+        startTime:
+          type: string
+          format: date-time
+          description: Game start time
+
+    RevealResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the reveal operation succeeded
+        gameState:
+          type: string
+          enum: [playing, won, lost]
+          description: Updated game state
+        revealedCells:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellInfo'
+          description: Information about revealed cells
+        isMine:
+          type: boolean
+          description: Whether the revealed cell was a mine
+        adjacentMines:
+          type: integer
+          minimum: 0
+          maximum: 8
+          description: Number of adjacent mines (if not a mine)
+
+    FlagResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the flag operation succeeded
+        isFlagged:
+          type: boolean
+          description: New flag state of the cell
+        flaggedCount:
+          type: integer
+          description: Total number of flagged cells
+
+    ExpandResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the expansion succeeded
+        expandedCells:
+          type: array
+          items:
+            $ref: '#/components/schemas/CellInfo'
+          description: Information about expanded cells
+        gameState:
+          type: string
+          enum: [playing, won]
+          description: Updated game state
+
+    GameStateResponse:
+      type: object
+      properties:
+        gameId:
+          type: string
+          description: Unique game identifier
+        state:
+          type: string
+          enum: [new, playing, paused, won, lost]
+          description: Current game state
+        boardWidth:
+          type: integer
+          description: Board width
+        boardHeight:
+          type: integer
+          description: Board height
+        mineCount:
+          type: integer
+          description: Total number of mines
+        revealedCount:
+          type: integer
+          description: Number of revealed cells
+        flaggedCount:
+          type: integer
+          description: Number of flagged cells
+        startTime:
+          type: string
+          format: date-time
+          description: Game start time
+        endTime:
+          type: string
+          format: date-time
+          description: Game end time (if finished)
+        movesCount:
+          type: integer
+          description: Total number of moves made
+
+    CellInfo:
+      type: object
+      properties:
+        row:
+          type: integer
+          description: Row position
+        col:
+          type: integer
+          description: Column position
+        isRevealed:
+          type: boolean
+          description: Whether the cell is revealed
+        isFlagged:
+          type: boolean
+          description: Whether the cell is flagged
+        isMine:
+          type: boolean
+          description: Whether the cell contains a mine
+        adjacentMines:
+          type: integer
+          minimum: 0
+          maximum: 8
+          description: Number of adjacent mines
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+        details:
+          type: object
+          additionalProperties: true
+          description: Additional error details
